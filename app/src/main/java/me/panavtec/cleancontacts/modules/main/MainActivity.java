@@ -133,4 +133,8 @@ public class MainActivity extends BaseActivity
             (TextView) view.findViewById(R.id.nameTextView));
     detailActionCommand.execute();
   }
+
+  @Override public void genericError() {
+
+  }
 }

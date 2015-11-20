@@ -161,4 +161,8 @@ public class DetailActivity extends BaseActivity
   @Override protected Object newDiModule() {
     return new DetailModule(getIntent().getStringExtra(CONTACT_MD5_EXTRA));
   }
+
+  @Override public void genericError() {
+
+  }
 }

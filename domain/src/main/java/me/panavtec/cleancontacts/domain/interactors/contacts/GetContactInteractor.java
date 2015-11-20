@@ -1,11 +1,10 @@
 package me.panavtec.cleancontacts.domain.interactors.contacts;
 
-import me.panavtec.cleancontacts.domain.entities.Contact;
 import me.panavtec.cleancontacts.domain.interactors.Interactor;
 import me.panavtec.cleancontacts.domain.interactors.contacts.exceptions.ObtainContactException;
 import me.panavtec.cleancontacts.domain.repository.ContactsRepository;
 
-public class GetContactInteractor implements Interactor<Contact, ObtainContactException> {
+public class GetContactInteractor implements Interactor<GetContactResponse> {
 
   private ContactsRepository repository;
   private String contactMd5;
@@ -18,7 +17,9 @@ public class GetContactInteractor implements Interactor<Contact, ObtainContactEx
     this.contactMd5 = contactMd5;
   }
 
-  @Override public Contact call() throws ObtainContactException {
-    return repository.obtain(contactMd5);
+  @Override public GetContactResponse call() throws ObtainContactException {
+    GetContactResponse getContactResponse = new GetContactResponse();
+    getContactResponse.setResponse(repository.obtain(contactMd5));
+    return getContactResponse;
   }
 }

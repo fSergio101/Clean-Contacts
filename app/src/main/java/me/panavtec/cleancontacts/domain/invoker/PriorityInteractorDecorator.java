@@ -3,18 +3,18 @@ package me.panavtec.cleancontacts.domain.invoker;
 import java.util.concurrent.Callable;
 import me.panavtec.cleancontacts.domain.interactors.Interactor;
 
-public class PriorityInteractorDecorator<T, E extends Exception>
+public class PriorityInteractorDecorator<T>
     implements Callable<T>, PriorizableInteractor {
 
-  private Interactor<T, E> interactor;
+  private Interactor<T> interactor;
   private int priority;
 
-  public PriorityInteractorDecorator(Interactor<T, E> interactor, int priority) {
+  public PriorityInteractorDecorator(Interactor<T> interactor, int priority) {
     this.interactor = interactor;
     this.priority = priority;
   }
 
-  @Override public T call() throws E {
+  @Override public T call() throws Exception {
     return interactor.call();
   }
 

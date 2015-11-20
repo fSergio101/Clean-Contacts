@@ -1,17 +1,14 @@
 package me.panavtec.cleancontacts.presentation.modules.detail;
 
+import me.panavtec.cleancontacts.domain.interactors.InteractorResult;
+import me.panavtec.cleancontacts.domain.interactors.contacts.GetContactResponse;
+import me.panavtec.cleancontacts.presentation.invoker.GenericErrorAction;
+import me.panavtec.cleancontacts.presentation.invoker.InteractorExecution;
 import me.panavtec.presentation.Presenter;
 import me.panavtec.cleancontacts.presentation.invoker.InteractorInvoker;
 import me.panavtec.cleancontacts.presentation.model.mapper.PresentationContactMapper;
-import me.panavtec.cleancontacts.domain.entities.Contact;
 import me.panavtec.cleancontacts.domain.interactors.contacts.GetContactInteractor;
-import me.panavtec.cleancontacts.domain.interactors.contacts.exceptions.ObtainContactException;
-import me.panavtec.presentation.common.outputs.InteractorOutput;
-import me.panavtec.presentation.common.outputs.InteractorOutputInjector;
 import me.panavtec.presentation.common.ThreadSpec;
-import me.panavtec.presentation.common.outputs.qualifiers.OnError;
-import me.panavtec.presentation.common.outputs.qualifiers.OnResult;
-import me.panavtec.presentation.common.outputs.qualifiers.Output;
 
 public class DetailPresenter extends Presenter<DetailView> {
 
@@ -19,7 +16,6 @@ public class DetailPresenter extends Presenter<DetailView> {
   private final InteractorInvoker interactorInvoker;
   private final GetContactInteractor getContactInteractor;
   private final PresentationContactMapper presentationContactMapper;
-  @Output InteractorOutput<Contact, ObtainContactException> getContactOutput;
 
   public DetailPresenter(String contactMd5, InteractorInvoker interactorInvoker,
       GetContactInteractor getContactInteractor,
@@ -29,7 +25,6 @@ public class DetailPresenter extends Presenter<DetailView> {
     this.interactorInvoker = interactorInvoker;
     this.getContactInteractor = getContactInteractor;
     this.presentationContactMapper = presentationContactMapper;
-    InteractorOutputInjector.inject(this);
   }
 
   @Override public void onViewAttached() {
@@ -42,14 +37,15 @@ public class DetailPresenter extends Presenter<DetailView> {
 
   public void obtainContact() {
     getContactInteractor.setData(contactMd5);
-    interactorInvoker.execute(getContactInteractor, getContactOutput);
-  }
 
-  @OnResult void onContactInteractorGetContactOutput(Contact data) {
-    getView().showContactData(presentationContactMapper.modelToData(data));
-  }
-
-  @OnError void onContactInteractorErrorGetContactOutput(ObtainContactException e) {
-    getView().showGetContactError();
+    new InteractorExecution<GetContactResponse>().
+        interactor(getContactInteractor).
+        result(new InteractorResult<GetContactResponse>() {
+          @Override public void onResult(GetContactResponse result) {
+            getView().showContactData(presentationContactMapper.modelToData(result.getResponse()));
+          }
+        }).
+        genericError(new GenericErrorAction(getView())).
+        execute(interactorInvoker);
   }
 }
