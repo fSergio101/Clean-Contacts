@@ -8,7 +8,7 @@ import me.panavtec.cleancontacts.presentation.invoker.InteractorInvoker;
 import me.panavtec.cleancontacts.presentation.model.mapper.PresentationContactMapper;
 import me.panavtec.cleancontacts.presentation.modules.detail.DetailPresenter;
 import me.panavtec.cleancontacts.domain.interactors.contacts.GetContactInteractor;
-import me.panavtec.presentation.common.ThreadSpec;
+import me.panavtec.threaddecoratedview.views.ThreadSpec;
 
 @Module(
     addsTo = ActivityModule.class,

@@ -13,7 +13,7 @@ import me.panavtec.cleancontacts.domain.outputs.BackThreadSpec;
 import me.panavtec.cleancontacts.domain.outputs.MainThreadSpec;
 import me.panavtec.cleancontacts.domain.outputs.SameThreadSpec;
 import me.panavtec.cleancontacts.domain.entities.Contact;
-import me.panavtec.presentation.common.ThreadSpec;
+import me.panavtec.threaddecoratedview.views.ThreadSpec;
 
 @Module(
     complete = false,
